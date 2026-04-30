@@ -6,7 +6,7 @@ from config.base import BaseConfig
 
 
 @dataclass
-class ServerConfig(BaseConfig):
+class ServerConfig():
     yaml_key: ClassVar[str] = "server"
     host: str
     port: int
