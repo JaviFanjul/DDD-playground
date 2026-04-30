@@ -2,6 +2,24 @@
 name = "ai-agent"
 version = "0.1.0"
 description = "Add your description here"
-readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "fastapi>=0.136.1",
+    "injector>=0.24.0",
+    "pyyaml>=6.0.3",
+    "types-pyyaml>=6.0.12.20260408",
+    "uvicorn>=0.46.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+dev-mode-dirs = ["src", "."]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/config", "resources"]
+
+[tool.uv]
+package = true
