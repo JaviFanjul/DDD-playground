@@ -2,11 +2,12 @@ from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
 from domain.errors import DomainError
-from domain.session.errors import InvalidSessionId
+from domain.session.errors import InvalidSessionId, SessionRepositoryError
 
 
 _DOMAIN_ERROR_TO_HTTP: dict[type[DomainError], int] = {
     InvalidSessionId: status.HTTP_422_UNPROCESSABLE_ENTITY,
+    SessionRepositoryError: status.HTTP_500_INTERNAL_SERVER_ERROR,
 }
 
 

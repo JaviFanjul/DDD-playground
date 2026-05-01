@@ -12,8 +12,16 @@ class ServerConfig():
     port: int
 
 @dataclass
+class RedisConfig():
+    yaml_key: ClassVar[str] = "redis"
+    host: str
+    port: int
+    db: int
+
+@dataclass
 class Config(BaseConfig):
     server: ServerConfig
+    redis: RedisConfig
  
 @lru_cache
 def get_config() -> Config:
