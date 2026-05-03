@@ -5,8 +5,8 @@ from domain.session.errors import SessionRepositoryError
 from domain.session.session import Session
 from domain.session.session_id import SessionId
 from domain.session.session_repository import SessionRepository
-from infrastructure.persistence.session.redis.redis_client import RedisClient
-from infrastructure.persistence.session.redis.redis_session_mapper import (
+from infrastructure.persistence.redis.redis_client import RedisClient
+from infrastructure.persistence.redis.session.redis_session_mapper import (
     RedisSessionMapper,
 )
 

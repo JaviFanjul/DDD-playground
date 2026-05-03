@@ -1,7 +1,12 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
-from domain.agent.errors import AgentInvocationError
+from domain.agent.errors import (
+    AgentInvocationError,
+    InvalidSystemPrompt,
+    SystemPromptNotConfigured,
+    SystemPromptRepositoryError,
+)
 from domain.errors import DomainError
 from domain.session.errors import (
     InvalidMessageOrder,
@@ -14,9 +19,12 @@ from domain.session.message.errors import InvalidMessageContent
 _DOMAIN_ERROR_TO_HTTP: dict[type[DomainError], int] = {
     InvalidSessionId: status.HTTP_422_UNPROCESSABLE_CONTENT,
     InvalidMessageContent: status.HTTP_422_UNPROCESSABLE_CONTENT,
+    InvalidSystemPrompt: status.HTTP_422_UNPROCESSABLE_CONTENT,
     InvalidMessageOrder: status.HTTP_409_CONFLICT,
     SessionRepositoryError: status.HTTP_500_INTERNAL_SERVER_ERROR,
     AgentInvocationError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+    SystemPromptRepositoryError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+    SystemPromptNotConfigured: status.HTTP_500_INTERNAL_SERVER_ERROR,
 }
 
 

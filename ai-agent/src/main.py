@@ -8,6 +8,7 @@ from container import AppModule
 from domain.errors import DomainError
 from infrastructure.controllers.http.health import health_controller
 from infrastructure.controllers.http.messages import message_controller
+from infrastructure.controllers.http.system_prompt import system_prompt_controller
 from infrastructure.errors.http.errors import domain_error_handler, unhandled_error_handler
 
 def main():
@@ -17,6 +18,7 @@ def main():
     app.add_exception_handler(Exception, unhandled_error_handler)
     app.include_router(health_controller.router)
     app.include_router(message_controller.router)
+    app.include_router(system_prompt_controller.router)
     attach_injector(app, Injector([AppModule()]))
     uvicorn.run(app, host=config.server.host, port=config.server.port)
 

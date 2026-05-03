@@ -8,7 +8,7 @@ from domain.session.message.message_content import MessageContent
 from domain.session.message.user_message import UserMessage
 from domain.session.session import Session
 from domain.session.session_id import SessionId
-from infrastructure.persistence.session.redis.redis_session_mapper import (
+from infrastructure.persistence.redis.session.redis_session_mapper import (
     RedisSessionMapper,
 )
 

@@ -1,5 +1,6 @@
 from typing import ClassVar
 
+from domain.agent.system_prompt import SystemPrompt
 from domain.session.message.assistant_message import AssistantMessage
 from domain.session.message.message import Message
 from domain.session.message.user_message import UserMessage
@@ -16,4 +17,11 @@ class OllamaMapper:
         return {
             "role": OllamaMapper._ROLE_BY_MESSAGE_TYPE[type(message)],
             "content": message.content.value,
+        }
+
+    @staticmethod
+    def to_ollama_system_message(system_prompt: SystemPrompt) -> dict[str, str]:
+        return {
+            "role": "system",
+            "content": system_prompt.value,
         }

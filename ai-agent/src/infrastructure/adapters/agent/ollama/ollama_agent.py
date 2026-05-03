@@ -3,6 +3,7 @@ from ollama import AsyncClient, ResponseError
 from config.config import OllamaConfig
 from domain.agent.agent import Agent
 from domain.agent.errors import AgentInvocationError
+from domain.agent.system_prompt import SystemPrompt
 from domain.session.message.message import Message
 from domain.session.message.message_content import MessageContent
 from infrastructure.adapters.agent.ollama.ollama_mapper import OllamaMapper
@@ -13,9 +14,14 @@ class OllamaAgent(Agent):
         self._client: AsyncClient = AsyncClient(host=config.host)
         self._model: str = config.model
 
-    async def ainvoke(self, conversation: tuple[Message, ...]) -> MessageContent:
+    async def ainvoke(
+        self,
+        conversation: tuple[Message, ...],
+        system_prompt: SystemPrompt,
+    ) -> MessageContent:
         messages: list[dict[str, str]] = [
-            OllamaMapper.to_ollama_message(m) for m in conversation
+            OllamaMapper.to_ollama_system_message(system_prompt),
+            *(OllamaMapper.to_ollama_message(m) for m in conversation),
         ]
         try:
             response = await self._client.chat(model=self._model, messages=messages)
