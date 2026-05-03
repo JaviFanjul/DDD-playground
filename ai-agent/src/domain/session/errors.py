@@ -7,3 +7,7 @@ class InvalidSessionId(DomainError):
 
 class SessionRepositoryError(DomainError):
     pass
+
+
+class InvalidMessageOrder(DomainError):
+    pass

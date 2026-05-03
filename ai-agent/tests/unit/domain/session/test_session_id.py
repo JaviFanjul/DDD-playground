@@ -18,3 +18,9 @@ def test_given_an_empty_value_when_creating_session_id_then_raises_invalid_sessi
 def test_given_a_non_string_value_when_creating_session_id_then_raises_invalid_session_id(value: object) -> None:
     with pytest.raises(InvalidSessionId):
         SessionId(value)  # type: ignore[arg-type]
+
+
+def test_given_a_value_with_surrounding_whitespace_when_creating_session_id_then_value_is_trimmed() -> None:
+    session_id = SessionId("  abc-123  ")
+
+    assert session_id.value == "abc-123"

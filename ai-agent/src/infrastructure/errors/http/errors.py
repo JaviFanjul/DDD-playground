@@ -2,11 +2,18 @@ from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
 from domain.errors import DomainError
-from domain.session.errors import InvalidSessionId, SessionRepositoryError
+from domain.session.errors import (
+    InvalidMessageOrder,
+    InvalidSessionId,
+    SessionRepositoryError,
+)
+from domain.session.message.errors import InvalidMessageContent
 
 
 _DOMAIN_ERROR_TO_HTTP: dict[type[DomainError], int] = {
     InvalidSessionId: status.HTTP_422_UNPROCESSABLE_ENTITY,
+    InvalidMessageContent: status.HTTP_422_UNPROCESSABLE_ENTITY,
+    InvalidMessageOrder: status.HTTP_409_CONFLICT,
     SessionRepositoryError: status.HTTP_500_INTERNAL_SERVER_ERROR,
 }
 
