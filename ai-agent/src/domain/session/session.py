@@ -14,6 +14,14 @@ class Session:
         self._id = session_id
         self._messages = []
 
+    @classmethod
+    def rehydrate(
+        cls, session_id: SessionId, messages: tuple[Message, ...]
+    ) -> "Session":
+        session = cls(session_id)
+        session._messages = list(messages)
+        return session
+
     @property
     def id(self) -> SessionId:
         return self._id

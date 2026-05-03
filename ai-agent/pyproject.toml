@@ -9,6 +9,7 @@ dependencies = [
     "injector>=0.24.0",
     "ollama>=0.6.2",
     "pyyaml>=6.0.3",
+    "redis>=7.4.0",
     "structlog>=25.5.0",
     "types-pyyaml>=6.0.12.20260408",
     "uvicorn>=0.46.0",

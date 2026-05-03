@@ -23,7 +23,7 @@ class AppModule(Module):
     @singleton
     @provider
     def provide_redis_client(self, config: RedisConfig) -> RedisClient:
-        return RedisClient()
+        return RedisClient(config)
 
     @singleton
     @provider
