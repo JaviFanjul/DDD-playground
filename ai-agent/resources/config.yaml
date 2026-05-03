@@ -6,3 +6,7 @@ redis:
   host: localhost
   port: 6379
   db: 0
+
+ollama:
+  host: http://localhost:11434
+  model: llama3.2

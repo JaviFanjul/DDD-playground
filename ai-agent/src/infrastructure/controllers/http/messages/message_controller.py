@@ -6,20 +6,26 @@ from application.handle_message.handle_message_command import HandleMessageComma
 from application.handle_message.handle_message_command_handler import (
     HandleMessageCommandHandler,
 )
+from application.handle_message.handle_message_command_result import (
+    HandleMessageCommandResult,
+)
 from infrastructure.controllers.http.messages.requests import SendMessageRequest
+from infrastructure.controllers.http.messages.responses import SendMessageResponse
 
 router = APIRouter(tags=["messages"])
 logger = structlog.get_logger(__name__)
 
 
-@router.post("/messages", status_code=status.HTTP_202_ACCEPTED)
+@router.post("/chat", status_code=status.HTTP_200_OK)
 async def send_message(
     payload: SendMessageRequest,
     handler: HandleMessageCommandHandler = Injected(HandleMessageCommandHandler),
-) -> None:
-    command = HandleMessageCommand(
+) -> SendMessageResponse:
+    command: HandleMessageCommand = HandleMessageCommand(
         session_id=payload.session_id,
         content=payload.content,
     )
     logger.info("Handling message", id=payload.session_id)
-    await handler.execute(command)
+    result: HandleMessageCommandResult = await handler.execute(command)
+    logger.info("Message handled successfully", id=payload.session_id)
+    return SendMessageResponse(session_id=result.session_id, reply=result.reply)

@@ -1,6 +1,7 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
+from domain.agent.errors import AgentInvocationError
 from domain.errors import DomainError
 from domain.session.errors import (
     InvalidMessageOrder,
@@ -15,6 +16,7 @@ _DOMAIN_ERROR_TO_HTTP: dict[type[DomainError], int] = {
     InvalidMessageContent: status.HTTP_422_UNPROCESSABLE_ENTITY,
     InvalidMessageOrder: status.HTTP_409_CONFLICT,
     SessionRepositoryError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+    AgentInvocationError: status.HTTP_500_INTERNAL_SERVER_ERROR,
 }
 
 

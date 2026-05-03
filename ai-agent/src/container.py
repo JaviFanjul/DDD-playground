@@ -3,8 +3,10 @@ from injector import Module, provider, singleton
 from application.handle_message.handle_message_command_handler import (
     HandleMessageCommandHandler,
 )
-from config.config import RedisConfig, get_config
+from config.config import OllamaConfig, RedisConfig, get_config
+from domain.agent.agent import Agent
 from domain.session.session_repository import SessionRepository
+from infrastructure.adapters.agent.ollama.ollama_agent import OllamaAgent
 from infrastructure.persistence.session.redis.redis_client import RedisClient
 from infrastructure.persistence.session.redis.redis_session_repository import (
     RedisSessionRepository,
@@ -28,8 +30,18 @@ class AppModule(Module):
     def provide_session_repository(self, client: RedisClient) -> SessionRepository:
         return RedisSessionRepository(client)
 
+    @singleton
+    @provider
+    def provide_ollama_config(self) -> OllamaConfig:
+        return get_config().ollama
+
+    @singleton
+    @provider
+    def provide_agent(self, config: OllamaConfig) -> Agent:
+        return OllamaAgent(config)
+
     @provider
     def provide_handle_message_command_handler(
-        self, session_repository: SessionRepository
+        self, session_repository: SessionRepository, agent: Agent
     ) -> HandleMessageCommandHandler:
-        return HandleMessageCommandHandler(session_repository)
+        return HandleMessageCommandHandler(session_repository, agent)
