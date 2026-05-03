@@ -1,3 +1,4 @@
+import structlog
 from redis.exceptions import RedisError
 
 from domain.session.errors import SessionRepositoryError
@@ -11,6 +12,7 @@ from infrastructure.persistence.session.redis.redis_session_mapper import (
 
 
 _KEY_PREFIX = "session:"
+logger = structlog.get_logger(__name__)
 
 
 class RedisSessionRepository(SessionRepository):
@@ -18,9 +20,12 @@ class RedisSessionRepository(SessionRepository):
         self._client = client
 
     async def get(self, session_id: SessionId) -> Session:
+        logger.info("Retrieving session", session_id=session_id.value)
         payload: str | None = await self._load_payload(session_id)
         if payload is None:
+            logger.info("Session not found, returning empty session", session_id=session_id.value)
             return Session(session_id)
+        logger.info("Session retrieved successfully", session_id=session_id.value)
         return RedisSessionMapper.from_json(payload, session_id)
 
     async def _load_payload(self, session_id: SessionId) -> str | None:
@@ -30,10 +35,12 @@ class RedisSessionRepository(SessionRepository):
             raise SessionRepositoryError(
                 f"Failed to load session {session_id.value}: {error}"
             ) from error
-        
+
     async def save(self, session: Session) -> None:
+        logger.info("Saving session", session_id=session.id.value)
         payload: str = RedisSessionMapper.to_json(session)
         await self._store_payload(session.id, payload)
+        logger.info("Session saved successfully", session_id=session.id.value)
 
     async def _store_payload(self, session_id: SessionId, payload: str) -> None:
         try:
